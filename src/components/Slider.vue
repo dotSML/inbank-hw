@@ -1,36 +1,40 @@
 <template>
-  <div class="slideContainer">
-    <input
-      type="range"
-      v-model="sliderValue"
-      :min="min"
-      :max="max"
-      :step="step"
-      @input="updateValue"
-      class="slider"
-      ref="slider"
-      :style="{ background: sliderBackground }"
-    />
-    <div
-      class="custom-thumb"
-      :style="thumbPosition"
-      @mousedown="startDrag"
-      @touchstart="startDrag"
-      ref="thumb"
-    >
-      <div class="custom-thumb-images flex justify-center items-center gap-1">
-        <img src="../assets/arrow-left.svg" alt="Arrow left" />
-        <img
-          src="../assets/arrow-left.svg"
-          alt="Arrow right"
-          class="rotate-180"
-        />
+  <div class="flex flex-col w-full">
+    <div class="slideContainer">
+      <input
+        type="range"
+        v-model="sliderValue"
+        :min="min"
+        :max="max"
+        :step="step"
+        @input="updateValue"
+        class="slider"
+        ref="slider"
+        :style="{ background: sliderBackground }"
+      />
+      <div
+        class="custom-thumb"
+        :style="thumbPosition"
+        @mousedown="startDrag"
+        @touchstart="startDrag"
+        ref="thumb"
+      >
+        <div class="custom-thumb-images flex justify-center items-center gap-1">
+          <img src="../assets/arrow-left.svg" alt="Arrow left" />
+          <img
+            src="../assets/arrow-left.svg"
+            alt="Arrow right"
+            class="rotate-180"
+          />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="flex justify-between">
-    <p class="text-accentDark opacity-60 text-sm">{{ min }}</p>
-    <p class="text-accentDark opacity-60 text-sm">{{ max }}</p>
+    <div class="flex justify-between">
+      <p class="text-accentDark opacity-60 text-sm">{{ `${min} ${affix}` }}</p>
+      <p class="text-accentDark opacity-60 text-sm">
+        {{ `${maxFormatted || max} ${affix}` }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -96,6 +100,10 @@
 export default {
   name: 'CustomSlider',
   props: {
+    modelValue: {
+      type: [Number, String],
+      default: 0,
+    },
     min: {
       type: Number,
       default: 0,
@@ -112,10 +120,18 @@ export default {
       type: Number,
       default: undefined,
     },
+    affix: {
+      type: String,
+      default: '',
+    },
+    maxFormatted: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
-      sliderValue: this.value || this.min,
+      sliderValue: this.modelValue || this.min,
       isDragging: false,
       sliderTrackWidth: 0,
       thumbWidth: 0,
@@ -140,9 +156,10 @@ export default {
       return `linear-gradient(to right, #21093A 0%, #21093A ${percentage}%, #e9e9e9 ${percentage}%, #e9e9e9 100%)`
     },
   },
+  emits: ['update:modelValue'],
   methods: {
     updateValue() {
-      this.$emit('onValue', this.sliderValue)
+      this.$emit('update:modelValue', this.sliderValue)
     },
     startDrag(event) {
       event.preventDefault()
@@ -215,8 +232,14 @@ export default {
     }
   },
   watch: {
-    value(newValue) {
-      this.sliderValue = newValue
+    modelValue(newValue) {
+      if (Number(newValue) < Number(this.min)) {
+        this.sliderValue = this.min
+      } else if (Number(newValue) > Number(this.max)) {
+        this.sliderValue = this.max
+      } else {
+        this.sliderValue = newValue
+      }
     },
   },
 }

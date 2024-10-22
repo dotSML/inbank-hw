@@ -13,6 +13,7 @@ export default {
         violetDark: '#AA93FF',
         accentDark: '#21093A',
         text: '#21093A',
+        textDark: '#60378B',
         gray: '#E9E9E9',
       },
       fontFamily: {
