@@ -6,6 +6,7 @@ export default {
     extend: {
       colors: {
         beige: '#D9D4A7',
+        sand: '#F0F0EA',
         neutral: '#FBFBF9',
         neutralDark: '#F0F0EA',
         grey: '#E9E9E9',
