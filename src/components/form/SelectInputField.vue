@@ -38,11 +38,11 @@ export default {
 </script>
 
 <template>
-  <div class="flex relative min-w-0 w-full">
+  <div class="flex relative w-full">
     <label for="input" :class="`${className} fieldLabel`">{{ label }}</label>
     <select
       @change="handleInput"
-      class="field"
+      class="selectField"
       :placeholder="placeholder"
       :value="modelValue"
     >
@@ -58,14 +58,23 @@ export default {
 </template>
 
 <style>
-.field {
+.selectField {
   width: 100%;
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   min-width: 0;
   border-radius: 8px;
   padding: 10px;
   background-color: #fff;
   border: 1px solid #60378b;
+  background: url('../../assets/select-arrow.svg') no-repeat right 10px center;
+  background-size: 16px 8px;
+  background-color: #fff;
+}
+
+.selectField::-ms-expand {
+  display: none;
 }
 
 .fieldLabel {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Button from '../components/Button.vue'
-import Calculator from '../components/Calculator.vue'
+import AppButton from '../components/AppButton.vue'
+import LoanCalculator from '../components/LoanCalculator.vue'
 </script>
 
 <template>
@@ -9,10 +9,12 @@ import Calculator from '../components/Calculator.vue'
       <div
         class="flex justify-center items-center py-20 px-10 bg-beige w-full md:w-[43%] rounded-[100px] lg:rounded-[200px] self-stretch"
       >
-        <div class="flex flex-col items-center justify-center gap-4">
-          <span>Mini loan</span>
+        <div
+          class="flex flex-col items-center justify-center gap-4 text-accentDark"
+        >
+          <span class="font-medium">Mini loan</span>
           <h2
-            class="sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-center font-bitter italic"
+            class="text-3xl md:text-4xl lg:text-6xl xl:text-7xl text-center font-bitter italic"
           >
             Take charge of unexpected costs
           </h2>
@@ -20,7 +22,9 @@ import Calculator from '../components/Calculator.vue'
             Finance unforeseen expenses with Inbank. A quick and easy
             application process with an instant credit decision.
           </p>
-          <Button variant="cta">Apply now</Button>
+          <a href="#calculator">
+            <AppButton variant="cta">Apply now</AppButton>
+          </a>
         </div>
       </div>
       <div
@@ -33,6 +37,6 @@ import Calculator from '../components/Calculator.vue'
         />
       </div>
     </div>
-    <Calculator />
+    <LoanCalculator />
   </main>
 </template>
