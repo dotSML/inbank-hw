@@ -30,8 +30,17 @@ onMounted(() => {
   box-shadow: 0px 0px 40px 0px #0000000a;
   border-radius: 20px;
 
+  @media screen and (max-width: 1024px) {
+    padding: 40px;
+  }
+
   @media screen and (max-width: 768px) {
-    padding: 20px;
+    min-height: 100vh;
+    align-items: flex-start;
+  }
+
+  @media screen and (max-width: 640px) {
+    padding: 20px 40px;
   }
 }
 </style>

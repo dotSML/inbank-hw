@@ -5,7 +5,9 @@ import LoanCalculator from '../components/LoanCalculator.vue'
 
 <template>
   <main>
-    <div class="flex pt-4 px-8 pb-20 gap-6 flex-col-reverse md:flex-row">
+    <div
+      class="flex pt-4 px-4 md:px-8 pb-10 md:pb-20 gap-6 flex-col-reverse md:flex-row"
+    >
       <div
         class="flex justify-center items-center py-20 px-10 bg-beige w-full md:w-[43%] rounded-[100px] lg:rounded-[200px] self-stretch"
       >

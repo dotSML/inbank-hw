@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppButton from './AppButton.vue'
+import { formatMoney } from '@/helpers/format-money.helper'
 
 const props = defineProps<{
   data: {
@@ -31,7 +32,7 @@ const props = defineProps<{
           class="flex items-center border-accentDark border-t border-opacity-15 grow w-full py-4"
         >
           <p class="font-medium basis-[50%]">Loan amount</p>
-          <p>{{ props.data.loanAmount }} €</p>
+          <p>{{ formatMoney(props.data.loanAmount) }} €</p>
         </div>
         <div
           class="flex items-center border-accentDark border-t border-opacity-15 grow w-full py-4"
@@ -43,15 +44,17 @@ const props = defineProps<{
           class="flex items-center border-accentDark border-y border-opacity-15 grow w-full py-4"
         >
           <p class="font-medium basis-[50%]">Monthly payment</p>
-          <p>{{ props.data.monthlyPayment }} €</p>
+          <p>{{ formatMoney(props.data.monthlyPayment) }} €</p>
         </div>
       </div>
-      <AppButton :full-width="true"> Back to home page </AppButton>
+      <a href="/">
+        <AppButton :full-width="true">Back to home page</AppButton>
+      </a>
     </div>
   </div>
   <div
     v-else
-    class="flex flex-col items-center justify-center py-28 w-full md:w-8/12 gap-8"
+    class="flex flex-col items-center justify-center md:py-28 w-full md:w-8/12 gap-8"
   >
     <div class="flex flex-col items-center justify-center gap-2 w-full">
       <h1 class="text-3xl font-bitter">

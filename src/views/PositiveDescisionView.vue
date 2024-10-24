@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center text-accentDark md:p-10 w-full">
+  <div class="flex items-center justify-center text-accentDark lg:p-10 w-full">
     <div
       class="box w-full flex-col items-center lg:flex-row gap-10 lg:gap-0 pb-10"
     >
@@ -38,7 +38,8 @@ onMounted(() => {
   min-width: 78vw;
   box-shadow: 0px 0px 40px 0px #0000000a;
   border-radius: 20px;
-  height: calc(100vh - 77px);
+
+  /* height: calc(100vh - 77px); */
 
   @media screen and (max-width: 1024px) {
     width: 100%;
@@ -47,6 +48,8 @@ onMounted(() => {
 
   @media screen and (max-width: 768px) {
     padding: 20px;
+    height: 100%;
+    width: 100%;
   }
 }
 

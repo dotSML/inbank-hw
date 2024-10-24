@@ -1,7 +1,7 @@
 <template>
   <button
     @click="handleClick"
-    :class="`rounded-[100px] py-3 px-6 ${buttonClass} ${fullWidth ? 'w-full' : ''} ${disabled ? 'bg-greyLighter text-greyLight cursor-not-allowed' : ''} active:bg-violetDarker`"
+    :class="`rounded-[100px] py-3 px-6 ${buttonClass} ${fullWidth ? 'w-full' : ''}  disabled:bg-greyLighter disabled:text-greyLight disabled:cursor-not-allowed active:bg-violetDarker`"
     :disabled="disabled"
   >
     <slot></slot>
@@ -15,8 +15,6 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'primary',
-    validator: (value: string) =>
-      ['primary', 'cta', 'cta-violet'].includes(value),
   },
   handleClick: {
     type: Function as PropType<(event: MouseEvent) => void>,
