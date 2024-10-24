@@ -31,19 +31,19 @@ const props = defineProps<{
         <div
           class="flex items-center border-accentDark border-t border-opacity-15 grow w-full py-4"
         >
-          <p class="font-medium basis-[50%]">Loan amount</p>
+          <p class="font-medium basis-[60%] md:basis-[50%]">Loan amount</p>
           <p>{{ formatMoney(props.data.loanAmount) }} €</p>
         </div>
         <div
           class="flex items-center border-accentDark border-t border-opacity-15 grow w-full py-4"
         >
-          <p class="font-medium basis-[50%]">Loan period</p>
+          <p class="font-medium basis-[60%] md:basis-[50%]">Loan period</p>
           <p>{{ props.data.loanTerm }} months</p>
         </div>
         <div
           class="flex items-center border-accentDark border-y border-opacity-15 grow w-full py-4"
         >
-          <p class="font-medium basis-[50%]">Monthly payment</p>
+          <p class="font-medium basis-[60%] md:basis-[50%]">Monthly payment</p>
           <p>{{ formatMoney(props.data.monthlyPayment) }} €</p>
         </div>
       </div>
