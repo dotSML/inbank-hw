@@ -1,7 +1,7 @@
 <template>
   <div class="p-6 md:p-10">
     <div class="flex w-full justify-between">
-      <h1 class="text-xl mb-4 text-text font-medium">Personal details</h1>
+      <h1 class="text-xl mb-4 text-accentDark font-medium">Personal details</h1>
       <img
         src="../../assets/cross.svg"
         @click="modal?.close()"
