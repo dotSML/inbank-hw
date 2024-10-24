@@ -32,10 +32,10 @@ const startApplication = () => {
   modal?.open(CalculatorModalContent)
 }
 
-const getMonthsOptions = () => {
+const getMonthsOptions = (): { value: string; label: string }[] => {
   const options = []
   for (let i = minMonths; i <= maxMonths; i++) {
-    options.push({ value: i, label: `${i} months` })
+    options.push({ value: i.toString(), label: `${i} months` })
   }
   return options
 }

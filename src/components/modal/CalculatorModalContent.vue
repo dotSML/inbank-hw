@@ -76,6 +76,7 @@ import { useLoanStore } from '@/stores/loan.store'
 import { processLoanApplication } from '@/services/loan.service'
 import { useRouter } from 'vue-router'
 import { useForm } from '../form/useForm'
+import Decimal from 'decimal.js'
 
 const modal = inject<ModalState>('modal')
 const loanStore = useLoanStore()
@@ -120,7 +121,7 @@ const fields = {
     validationError: '',
     required: true,
     validate: (val: string) => {
-      if (parseFloat(val) < 100) {
+      if (new Decimal(val).lessThan(100)) {
         return 'Monthly income must be at least 100'
       }
     },

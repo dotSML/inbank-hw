@@ -1,39 +1,14 @@
-<script lang="ts">
-export default {
-  name: 'SelectInputField',
-  props: {
-    modelValue: {
-      type: [String, Number],
-      required: true,
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-    className: {
-      type: String,
-      default: '',
-    },
-    options: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  emits: ['update:modelValue'],
-  methods: {
-    handleInput(event) {
-      this.$emit('update:modelValue', event.target.value)
-    },
-  },
-  watch: {
-    modelValue(newValue) {
-      this.inputValue = newValue
-    },
-  },
+<script setup lang="ts">
+defineProps<{
+  modelValue: string | number
+  label?: string
+  placeholder?: string
+  className?: string
+  options: { value: string; label: string }[]
+}>()
+const emit = defineEmits(['update:modelValue'])
+const handleInput = (event: Event) => {
+  emit('update:modelValue', (event?.target as HTMLSelectElement).value)
 }
 </script>
 
