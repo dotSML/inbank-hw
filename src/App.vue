@@ -9,7 +9,9 @@ provide('modal', modal)
 
 <template>
   <header class="flex py-4 px-8">
-    <img class="w-32" src="./assets/logo.svg" alt="InBank logo" />
+    <a href="/">
+      <img class="w-32" src="./assets/logo.svg" alt="InBank logo" />
+    </a>
   </header>
   <RouterView />
   <AppModal />

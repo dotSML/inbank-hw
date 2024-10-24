@@ -19,9 +19,6 @@
       @input="handleInput"
       @blur="handleBlur"
     />
-    <!-- <p v-if="errorMessage" class="text-red-500 text-xs mt-1">
-      {{ errorMessage }}
-    </p> -->
   </div>
 </template>
 
@@ -30,7 +27,7 @@ import { ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
-    type: [String],
+    type: [String, Number],
     required: true,
   },
   validationError: {
@@ -101,7 +98,8 @@ watch(
 
 const handleBlur = () => {
   touched.value = true
-  if (!inputValue.value.trim() && props.required) {
+  const value = inputValue.value.toString()
+  if (!value.trim() && props.required) {
     errorMessage.value = 'This field is required'
     emit('update:validationError', 'This field is required')
   }
@@ -120,7 +118,6 @@ const handleInput = (event: Event) => {
       emit('update:validationError', '')
     }
   } else {
-    // Clear any existing validation errors if no validate function is provided
     errorMessage.value = ''
     emit('update:validationError', '')
   }

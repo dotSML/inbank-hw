@@ -8,6 +8,9 @@ import { computed, inject, ref } from 'vue'
 import Decimal from 'decimal.js'
 import CalculatorModalContent from './modal/CalculatorModalContent.vue'
 import type { ModalState } from '@/services/modal.service'
+import { useLoanStore } from '@/stores/loan.store'
+
+const loanStore = useLoanStore()
 
 const minAmount = 300
 const maxAmount = 7200
@@ -20,7 +23,12 @@ const monthsValue = ref(minMonths)
 
 const modal = inject<ModalState>('modal')
 
-const openModal = () => {
+const startApplication = () => {
+  loanStore.saveLoanInfo({
+    loanAmount: amountValue.value,
+    loanTerm: monthsValue.value,
+    monthlyPayment: new Decimal(monthlyPayment.value || 0).toNumber(),
+  })
   modal?.open(CalculatorModalContent)
 }
 
@@ -43,14 +51,14 @@ const monthlyPayment = computed(() => {
     return null
   }
 
-  return Decimal.div(amount, months).toFixed(2) // Fixed to 2 decimal places
+  return Decimal.div(amount, months).toFixed(2)
 })
 </script>
 
 <template>
   <div
     id="calculator"
-    class="flex flex-col lg:flex-row bg-violet items-center justify-center px-4 py-10 md:px-10 md:py-20 gap-4 md:gap-0 text-accentDark"
+    class="flex flex-col lg:flex-row bg-violet items-center justify-center px-4 py-10 md:py-0 md:px-10 gap-4 md:gap-0 text-accentDark"
   >
     <div class="flex flex-col w-full basis-[50%] md:p-10 gap-2 md:gap-0">
       <h2
@@ -110,10 +118,12 @@ const monthlyPayment = computed(() => {
         </div>
         <div class="flex flex-col items-center justify-center">
           <h5 class="text-center text-md mb-2">Monthly payment</h5>
-          <h2 class="font-bitter text-5xl mb-6">
+          <h2 class="font-bitter text-[34px] md:text-5xl mb-6">
             {{ monthlyPayment ? `${monthlyPayment} €` : '-' }}
           </h2>
-          <Button :onclick="openModal" variant="cta-violet">Apply now</Button>
+          <Button :onclick="startApplication" variant="cta-violet"
+            >Apply now</Button
+          >
           <p class="text-xs mt-6">
             The calculation is approximate and may differ from the conditions
             offered to you. Please submit a loan application to receive a

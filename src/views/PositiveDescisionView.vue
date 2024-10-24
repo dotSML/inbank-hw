@@ -1,24 +1,21 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue'
+import { onMounted } from 'vue'
 import DecisionResult from '../components/DecisionResult.vue'
-const props = defineProps({})
-const data = shallowRef({
-  applicantFirstName: 'Mike',
-  applicantLastName: 'Smith',
-  applicantMobileNumber: '1234567890',
-  applicantEmail: 'mikey@sdf.com',
-  applicantMonthlyIncome: 1000,
-  loanAmount: 2500,
-  loanTerm: 48,
-  monthlyPayment: 144.84,
-  approved: false,
+import { useLoanStore } from '@/stores/loan.store'
+import { useRouter } from 'vue-router'
+const loanStore = useLoanStore()
+const router = useRouter()
+
+onMounted(() => {
+  if (!loanStore.applicantFirstName) {
+    router.push('/')
+  }
 })
 </script>
 
 <template>
   <div class="flex items-center justify-center text-accentDark md:p-10 w-full">
     <div
-      v-if="data.approved"
       class="box w-full flex-col items-center lg:flex-row gap-10 lg:gap-0 pb-10"
     >
       <div class="illustration">
@@ -29,23 +26,8 @@ const data = shallowRef({
         />
       </div>
       <div class="flex justify-center items-center w-full lg:basis-[50%]">
-        <DecisionResult
-          :approved="false"
-          :data="{
-            applicantFirstName: 'Mike',
-            applicantLastName: 'Smith',
-            applicantMobileNumber: '1234567890',
-            applicantEmail: 'mike@mikey.com',
-            applicantMonthlyIncome: 1000,
-            loanAmount: 2500,
-            loanTerm: 48,
-            monthlyPayment: 144.84,
-          }"
-        />
+        <DecisionResult :data="loanStore" />
       </div>
-    </div>
-    <div class="negBox" v-else>
-      <DecisionResult :approved="data.approved" :data="data" />
     </div>
   </div>
 </template>
@@ -92,18 +74,6 @@ const data = shallowRef({
       height: 100%;
       width: 100%;
     }
-  }
-}
-
-.negBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 0px 40px 0px #0000000a;
-  border-radius: 20px;
-
-  @media screen and (max-width: 768px) {
-    padding: 20px;
   }
 }
 </style>

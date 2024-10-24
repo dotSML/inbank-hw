@@ -1,9 +1,9 @@
-import { reactive, type Slot } from 'vue'
+import { reactive, type Component } from 'vue'
 
 export interface ModalState {
   isOpen: boolean
-  content: Slot | null
-  open: (content: Slot) => void
+  content: Component | null
+  open: (content: Component) => void
   close: () => void
 }
 

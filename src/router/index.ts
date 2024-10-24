@@ -11,10 +11,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/decision',
-      name: 'decision',
+      path: '/positive-decision',
+      name: 'positive-decision',
       meta: { title: 'InBank - Decision' },
-      component: () => import('../views/DecisionView.vue'),
+      component: () => import('../views/PositiveDescisionView.vue'),
+    },
+    {
+      path: '/negative-decision',
+      name: 'negative-decision',
+      meta: { title: 'InBank - Decision' },
+      component: () => import('../views/NegativeDescisionView.vue'),
     },
   ],
 })

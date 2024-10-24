@@ -13,108 +13,151 @@
       id="calculatorForm"
     >
       <InputField
-        v-model="formData.firstName.value"
-        v-model:validation-error="formData.firstName.validationError"
+        v-model="formFields.firstName.value"
+        v-model:validation-error="formFields.firstName.validationError"
         variant="secondary"
         type="text"
         placeholder="First name"
-        :required="true"
+        :required="formFields.firstName.required"
       />
       <InputField
-        v-model="formData.lastName.value"
-        v-model:validation-error="formData.lastName.validationError"
+        v-model="formFields.lastName.value"
+        v-model:validation-error="formFields.lastName.validationError"
         type="text"
         variant="secondary"
         placeholder="Last name"
-        :required="true"
+        :required="formFields.lastName.required"
       />
       <InputField
-        v-model="formData.mobileNumber.value"
-        v-model:validation-error="formData.mobileNumber.validationError"
+        v-model="formFields.phone.value"
+        v-model:validation-error="formFields.phone.validationError"
         type="tel"
         variant="secondary"
-        :required="true"
-        :validate="
-          (val: string) => {
-            if (val.length !== 7 && val.length !== 8) {
-              return 'Mobile number must be 7 or 8 digits long'
-            }
-
-            if (!val.startsWith('55')) {
-              return 'Mobile number should start with 55'
-            }
-          }
-        "
+        :required="formFields.phone.required"
+        :validate="formFields.phone.validate"
         placeholder="Mobile number"
       />
       <InputField
-        v-model="formData.email.value"
-        v-model:validation-error="formData.email.validationError"
+        v-model="formFields.email.value"
+        v-model:validation-error="formFields.email.validationError"
         type="email"
-        :required="true"
-        :validate="
-          (val: string) => {
-            if (!val.includes('@')) {
-              return 'Email must contain @'
-            }
-          }
-        "
+        :required="formFields.email.required"
+        :validate="formFields.email.validate"
         variant="secondary"
         placeholder="Email"
       />
 
       <InputField
-        v-model="formData.monthlyIncome.value"
-        v-model:validation-error="formData.monthlyIncome.validationError"
+        v-model="formFields.monthlyIncome.value"
+        v-model:validation-error="formFields.monthlyIncome.validationError"
         type="number"
-        :min="100"
+        :min="0"
         placeholder="Monthly income"
         variant="secondary"
-        :required="true"
+        :validate="formFields.monthlyIncome.validate"
+        :required="formFields.monthlyIncome.required"
       />
     </div>
-    <AppButton :handleClick="handleSubmit" :fullWidth="true">Submit</AppButton>
+    <AppButton
+      :handleClick="handleSubmit"
+      :disabled="loanStore.isProcessing"
+      :fullWidth="true"
+      >{{ `${loanStore.isProcessing ? 'Loading...' : 'Submit'}` }}</AppButton
+    >
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ModalState } from '@/services/modal.service'
-import { computed, inject, shallowRef } from 'vue'
+import { inject } from 'vue'
 import InputField from '../form/InputField.vue'
 import AppButton from '../AppButton.vue'
+import { useLoanStore } from '@/stores/loan.store'
+import { processLoanApplication } from '@/services/loan.service'
+import { useRouter } from 'vue-router'
+import { useForm } from '../form/useForm'
 
 const modal = inject<ModalState>('modal')
+const loanStore = useLoanStore()
+const router = useRouter()
 
-const formData = shallowRef({
-  firstName: { value: '', validationError: '' },
-  lastName: { value: '', validationError: '' },
-  mobileNumber: { value: '', validationError: '' },
-  email: { value: '', validationError: '' },
-  monthlyIncome: { value: '', validationError: '' },
-})
+const fields = {
+  firstName: {
+    value: '',
+    validationError: '',
+    required: true,
+  },
+  lastName: {
+    value: '',
+    validationError: '',
+    required: true,
+  },
+  phone: {
+    value: '',
+    validationError: '',
+    required: true,
+    validate: (val: string) => {
+      if (val.length !== 7 && val.length !== 8) {
+        return 'Mobile number must be 7 or 8 digits long'
+      }
+      if (!val.startsWith('55')) {
+        return 'Mobile number should start with 55'
+      }
+    },
+  },
+  email: {
+    value: '',
+    validationError: '',
+    required: true,
+    validate: (val: string) => {
+      if (!val.includes('@')) {
+        return 'Email must contain @'
+      }
+    },
+  },
+  monthlyIncome: {
+    value: '',
+    validationError: '',
+    required: true,
+    validate: (val: string) => {
+      if (parseFloat(val) < 100) {
+        return 'Monthly income must be at least 100'
+      }
+    },
+  },
+}
 
-const hasValidationErrors = computed(() => {
-  return Object.values(formData.value).some(
-    field => field.validationError && field.validationError.length > 0,
-  )
-})
+const { formFields, hasValidationErrors, validateForm } = useForm(fields)
 
-const handleSubmit = () => {
-  const inputs = document.querySelectorAll('#calculatorForm input')
-
-  inputs.forEach(input => {
-    console.log('INPUT - ', input)
-    //@ts-expect-error lol
-    input.blur()
-  })
-
-  console.log('Inputs:', inputs)
+const handleSubmit = async () => {
+  validateForm()
 
   if (hasValidationErrors.value) {
-    console.log('Form has validation errors:', formData.value)
+    console.log('Form has validation errors:', formFields.value)
   } else {
-    console.log('Form is valid:', formData.value)
-    // Proceed with form submission
+    console.log('Form is valid:', formFields.value)
+    loanStore.saveApplicantInfo({
+      applicantFirstName: formFields.value.firstName.value,
+      applicantLastName: formFields.value.lastName.value,
+      applicantPhone: formFields.value.phone.value,
+      applicantEmail: formFields.value.email.value,
+      applicantMonthlyIncome: Number(formFields.value.monthlyIncome.value),
+    })
+
+    await requestLoan()
   }
+}
+
+const requestLoan = async () => {
+  loanStore.setIsProcessing(true)
+  const applicationOutcome = (await processLoanApplication(
+    loanStore.$state,
+  )) as boolean
+
+  loanStore.setApprovalStatus(applicationOutcome)
+  loanStore.setIsProcessing(false)
+
+  modal?.close()
+  router.push(applicationOutcome ? '/positive-decision' : '/negative-decision')
 }
 </script>

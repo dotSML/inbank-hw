@@ -2,23 +2,23 @@
 import AppButton from './AppButton.vue'
 
 const props = defineProps<{
-  approved: boolean
   data: {
     applicantFirstName: string
     applicantLastName: string
-    applicantMobileNumber: string
+    applicantPhone: string
     applicantEmail: string
     applicantMonthlyIncome: number
     loanAmount: number
     loanTerm: number
     monthlyPayment: number
+    approved: boolean
   }
 }>()
 </script>
 
 <template>
   <div
-    v-if="approved"
+    v-if="data.approved"
     class="flex flex-col items-center justify-center w-full lg:py-28 lg:px-24 lg:pr-20"
   >
     <div class="flex flex-col items-center justify-center gap-2 w-full">
@@ -69,8 +69,8 @@ const props = defineProps<{
         </p>
       </div>
     </div>
-    <div class="max-w-[300px] w-full">
+    <a class="max-w-[300px] w-full" href="/">
       <AppButton :full-width="true">Exit</AppButton>
-    </div>
+    </a>
   </div>
 </template>
