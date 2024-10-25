@@ -73,10 +73,12 @@ const monthlyPayment = computed(() => {
     </div>
     <VerticalDivider />
     <div
-      class="flex basis-[50%] w-full items-center justify-center md:py-20 md:px-10"
+      class="flex basis-[50%] w-full items-center justify-center md:gap-0 md:py-20 md:px-10"
     >
-      <div class="flex flex-col w-full gap-6">
-        <div class="flex w-full justify-between items-center gap-6">
+      <div class="flex flex-col w-full gap-10 md:gap-6">
+        <div
+          class="flex flex-col-reverse md:flex-row w-full justify-between md:items-center gap-0 md:gap-6"
+        >
           <div class="flex w-full basis-[70%]">
             <Slider
               v-model="amountValue"
@@ -98,7 +100,9 @@ const monthlyPayment = computed(() => {
           </div>
         </div>
 
-        <div class="flex justify-center items-center gap-6">
+        <div
+          class="flex flex-col-reverse md:flex-row justify-center md:items-center gap-0 md:gap-6"
+        >
           <div class="basis-[70%]">
             <Slider
               v-model="monthsValue"
